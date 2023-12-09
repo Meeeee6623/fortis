@@ -20,7 +20,7 @@ export default async (req, res) => {
             const values = [`${searchQuery}`];
 
             console.log('Success! TotalTime');
-            const results = await pool.query(timey, values);
+            const results = await pool.query(History, values);
 
             res.json({ success: true, data: results });
         } catch (err) {
