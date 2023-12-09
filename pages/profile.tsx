@@ -124,6 +124,7 @@ const ProfilePage: React.FC = () => {
   };
 
   useEffect(() => {
+    console.log(getCookie('uid'));
     const fetchData = async () => {
       console.log(getCookie('uid'));
       try {
