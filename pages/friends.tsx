@@ -144,20 +144,20 @@ const FlexiblePersonList1: React.FC<FlexiblePersonListProps> = ({ people, onAcce
           </div>
 
           <div className='grid grid-cols-5 gap-1'>
-            <p className="col-span-1 font-bold">Age:</p>
-            <p className="col-span-4">{person.age !== null ? person.age : 'Not specified'}</p>
+            <p className="col-span-1 font-bold text-sm">Age:</p>
+            <p className="col-span-4 text-sm">{person.age !== null ? person.age : 'Not specified'}</p>
 
-            <p className="col-span-1 font-bold">Gender:</p>
-            <p className="col-span-4">{person.gender !== null ? person.gender : 'Not specified'}</p>
+            <p className="col-span-1 text-sm font-bold">Gender:</p>
+            <p className="col-span-4 text-sm">{person.gender !== null ? person.gender : 'Not specified'}</p>
 
-            <p className="col-span-1 font-bold">Email:</p>
-            <p className="col-span-4">{person.email !== null ? person.email : ''}</p>
+            <p className="col-span-1 font-bold text-sm">Email:</p>
+            <p className="col-span-4 text-sm">{person.email !== null ? person.email : ''}</p>
 
-            <p className="col-span-1 font-bold">Sets <br /> (2w):</p>
-            <p className="col-span-4">{person.totalsets !== 0 ? person.totalsets : 'FAILURE'}</p>
+            <p className="col-span-1 font-bold text-sm">Points <br /> (2w):</p>
+            <p className="col-span-4 text-sm">{person.totalsets !== 0 ? person.totalsets : 'FAILURE'}</p>
 
-            <p className="col-span-1 font-bold">About:</p>
-            <p className="col-span-4 overflow-x-auto">
+            <p className="col-span-1 font-bold text-sm">About:</p>
+            <p className="col-span-4 text-sm overflow-x-auto">
               {showMore[index] ? person.about : person.about?.slice(0, MAX_ABOUT_LENGTH) || 'Not specified'}
               {person.about && person.about.length > MAX_ABOUT_LENGTH && (
                 <button onClick={() => toggleShowMore(index)} className="text-[#2FABDD] hover:underline ml-2">
@@ -199,14 +199,14 @@ const FlexiblePersonList2: React.FC<FlexiblePersonListProps> = ({ people, onAcce
           </div>
 
           <div className='grid grid-cols-5 gap-1'>
-            <p className="col-span-1 font-bold">Age:</p>
-            <p className="col-span-4">{person.age !== null ? person.age : 'Not specified'}</p>
+            <p className="col-span-1 text-sm font-bold">Age:</p>
+            <p className="col-span-4 text-sm">{person.age !== null ? person.age : 'Not specified'}</p>
 
-            <p className="col-span-1 font-bold">Gender:</p>
-            <p className="col-span-4">{person.age !== null ? person.gender : 'Not specified'}</p>
+            <p className="col-span-1 text-sm font-bold">Gender:</p>
+            <p className="col-span-4 text-sm">{person.age !== null ? person.gender : 'Not specified'}</p>
 
-            <p className="col-span-1 font-bold">About:</p>
-            <p className="col-span-4">
+            <p className="col-span-1 text-sm font-bold">About:</p>
+            <p className="col-span-4 text-sm">
               {showMore[index] ? person.about : person.about?.slice(0, MAX_ABOUT_LENGTH) || 'Not specified'}
               {person.about && person.about.length > MAX_ABOUT_LENGTH && (
                 <button onClick={() => toggleShowMore(index)} className="text-[#2FABDD] hover:underline ml-2">
@@ -241,14 +241,14 @@ const FlexiblePersonList: React.FC<FlexiblePersonListProps> = ({ people, onAccep
           <h2 className="text-2xl font-bold  gradient-text-bg">{person.name || 'Not specified'}</h2>
 
           <div className='grid grid-cols-5 gap-1'>
-            <p className="col-span-1 font-bold">Age:</p>
-            <p className="col-span-4">{person.age !== null ? person.age : 'Not specified'}</p>
+            <p className="col-span-1 font-bold text-sm">Age:</p>
+            <p className="col-span-4 text-sm">{person.age !== null ? person.age : 'Not specified'}</p>
 
-            <p className="col-span-1 font-bold">Gender:</p>
-            <p className="col-span-4">{person.age !== null ? person.gender : 'Not specified'}</p>
+            <p className="col-span-1 text-sm font-bold">Gender:</p>
+            <p className="col-span-4 text-sm">{person.age !== null ? person.gender : 'Not specified'}</p>
 
-            <p className="col-span-1 font-bold">About:</p>
-            <p className="col-span-4">
+            <p className="col-span-1 text-sm font-bold">About:</p>
+            <p className="col-span-4 text-sm">
               {showMore[index] ? person.about : person.about?.slice(0, MAX_ABOUT_LENGTH) || 'Not specified'}
               {person.about && person.about.length > MAX_ABOUT_LENGTH && (
                 <button onClick={() => toggleShowMore(index)} className="text-[#2FABDD] hover:underline ml-2">
