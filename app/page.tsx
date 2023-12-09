@@ -89,7 +89,8 @@ const Home: React.FC = () => {
         await getUID(user.email);
       await handleUserDataSave();
       setCookie('units', 'Imperial');
-      window.location.reload();}
+      // window.location.reload();
+    }
     }
   };
 
