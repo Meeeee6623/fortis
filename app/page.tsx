@@ -27,7 +27,7 @@ interface DataPoint {
 const Home: React.FC = () => {
   const { user, error, isLoading } = useUser();                 // auth0 login status
   let firstLogin = false;                                       // check if first time logged in
-
+  let count = 0;
   // ---- start of scroll effect ----
   // states to do scrolling information effect
   const [showTextBox, setShowTextBox] = useState(false);
@@ -59,6 +59,7 @@ const Home: React.FC = () => {
   // ---- start of API fn ----
   // get UID from email (auth0) and save to uid cookie
   const getUID = async (userEmail: any) => {
+    count += 1;
     try {
       const response = await fetch('/api/GetUIDfromEmail', {
         method: 'POST',
@@ -82,12 +83,13 @@ const Home: React.FC = () => {
       return data.data.rows[0].uid;
     }
     catch {
+      if (count == 1){
       await handleUserSave();
       if (user)
         await getUID(user.email);
       await handleUserDataSave();
       setCookie('units', 'Imperial');
-      window.location.reload();
+      window.location.reload();}
     }
   };
 
