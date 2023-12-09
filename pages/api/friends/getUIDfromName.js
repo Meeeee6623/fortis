@@ -3,7 +3,7 @@ import { Pool } from 'pg';
 
 const pool = new Pool({
     // connectionString: process.env.POSTGRES_URL
-    connectionString: "postgres://default:Azy2srgWb9aU@ep-polished-cherry-55480419-pooler.us-east-1.postgres.vercel-storage.com/verceldb?sslmode=require"
+    connectionString: "postgres://default:RcXhD7Ag9wUV@ep-green-bird-78301737-pooler.us-east-1.postgres.vercel-storage.com:5432/verceldb?sslmode=require"
 });
 
 const searchUserUID = `
