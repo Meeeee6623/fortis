@@ -3,7 +3,7 @@ import { Pool } from 'pg';
 
 const pool = new Pool({
     // connectionString: process.env.POSTGRES_URL
-    connectionString: "postgres://default:RcXhD7Ag9wUV@ep-green-bird-78301737-pooler.us-east-1.postgres.vercel-storage.com:5432/verceldb?sslmode=require"
+    connectionString: "postgres://default:Azy2srgWb9aU@ep-polished-cherry-55480419-pooler.us-east-1.postgres.vercel-storage.com/verceldb?sslmode=require"
 });
 
 const History = `
@@ -19,12 +19,13 @@ export default async (req, res) => {
         try {
             const values = [`${searchQuery}`];
 
-            console.log('Success! TotalTime');
+            console.log('Success! TemplateWorkouts');
             const results = await pool.query(History, values);
+
 
             res.json({ success: true, data: results });
         } catch (err) {
-            console.log('error in TotalTime');
+            console.log('error in TemplateWorkouts');
             console.error(err);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
