@@ -209,35 +209,35 @@ const ProfilePage: React.FC = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api/getEmailfromUID', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            searchQuery: getCookie('uid'),
-          }),
-        });
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch('/api/getEmailfromUID', {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify({
+  //           searchQuery: getCookie('uid'),
+  //         }),
+  //       });
 
-        if (!response.ok) {
-          throw new Error('Failed to get UID from email');
-        }
+  //       if (!response.ok) {
+  //         throw new Error('Failed to get UID from email');
+  //       }
 
-        const data = await response.json();
-        console.log(data.data.rows[0].email);
-        setEmail(data.data.rows[0].email);
-        return data.data.rows[0].email;
-      }
-      catch (err) {
-        console.log('Error in GetUIDfromEmail:', err);
-      }
-    };
+  //       const data = await response.json();
+  //       console.log(data.data.rows[0].email);
+  //       setEmail(data.data.rows[0].email);
+  //       return data.data.rows[0].email;
+  //     }
+  //     catch (err) {
+  //       console.log('Error in GetUIDfromEmail:', err);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   const setUnitsAndConvert = (newUnits: any) => {
     if (units === 'Imperial' && newUnits === 'Metric') {
