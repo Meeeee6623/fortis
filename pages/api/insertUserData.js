@@ -1,3 +1,5 @@
+// insert user data into user_data
+
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -18,7 +20,7 @@ export default async (req, res) => {
             // Insert user
             console.log('Success! InsertAuthUser');
             await pool.query(insertUser, [uid, name]);
-            
+
             res.status(200).send('Data saved successfully');
         } catch (err) {
             console.log('Error in InsertAuthUser');

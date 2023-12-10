@@ -1,3 +1,5 @@
+// same as searchExcName but it filters based on gym
+
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -21,7 +23,7 @@ export default async (req, res) => {
             const values = [`%${searchQuery}%`, gym];
             console.log('hi');
             const results = await pool.query(searchExcName, values);
-            
+
             res.json({ success: true, data: results });
         } catch (err) {
             console.log('hello');

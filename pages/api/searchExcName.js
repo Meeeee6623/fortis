@@ -1,3 +1,5 @@
+// search exercise data using name of exercise
+
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -18,12 +20,12 @@ export default async (req, res) => {
         try {
             // Insert user
             const values = [`%${searchQuery}%`];
-            console.log('hi');
+            // console.log('hi');
             const results = await pool.query(searchExcName, values);
-            
+
             res.json({ success: true, data: results });
         } catch (err) {
-            console.log('hello');
+            // console.log('hello');
             console.error(err);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }

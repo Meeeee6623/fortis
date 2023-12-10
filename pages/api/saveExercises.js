@@ -1,3 +1,5 @@
+// save exercise data once user presses finish
+
 import { Pool } from 'pg';
 
 const pool = new Pool({

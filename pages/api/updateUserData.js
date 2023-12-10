@@ -1,3 +1,6 @@
+// profile
+// update user data 
+
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -26,7 +29,7 @@ export default async (req, res) => {
         try {
             const values = [uid, name, age, height, weight, gender, units, privacy, about];
             await pool.query(updateUser, values);
-            
+
             res.status(200).send('Data saved successfully');
         } catch (err) {
             console.log('Error in InsertAuthUser');

@@ -1,22 +1,24 @@
+// this gives a paginated version of activites in discover template
+
 import { Pool } from 'pg';
 
 const pool = new Pool({
-    connectionString: "postgres://default:RcXhD7Ag9wUV@ep-green-bird-78301737-pooler.us-east-1.postgres.vercel-storage.com:5432/verceldb?sslmode=require"
+  connectionString: "postgres://default:RcXhD7Ag9wUV@ep-green-bird-78301737-pooler.us-east-1.postgres.vercel-storage.com:5432/verceldb?sslmode=require"
 });
 
 export default async (req, res) => {
-    if (req.method === 'POST') {
-      try {
-        const page = parseInt(req.body.page);
-        const size = parseInt(req.body.size);
-        const UID = req.body.uid;
-        
-        if (isNaN(page) || page < 0) {
-          return res.status(400).json({ success: false, message: 'Invalid page number' });
-        }
-        if (isNaN(size) || size <= 0) {
-          return res.status(400).json({ success: false, message: 'Invalid page size' });
-        }        
+  if (req.method === 'POST') {
+    try {
+      const page = parseInt(req.body.page);
+      const size = parseInt(req.body.size);
+      const UID = req.body.uid;
+
+      if (isNaN(page) || page < 0) {
+        return res.status(400).json({ success: false, message: 'Invalid page number' });
+      }
+      if (isNaN(size) || size <= 0) {
+        return res.status(400).json({ success: false, message: 'Invalid page size' });
+      }
 
 
       // SQL query with pagination
@@ -49,7 +51,7 @@ export default async (req, res) => {
       // Execute the query
       const results = await pool.query(paginatedHistory, [offset, size, UID]);
 
-      res.json({ success: true, data: results.rows});
+      res.json({ success: true, data: results.rows });
     } catch (err) {
       console.error(err);
       res.status(500).json({ success: false, message: 'Internal Server Error' });

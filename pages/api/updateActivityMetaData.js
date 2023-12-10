@@ -1,3 +1,5 @@
+// this query will update metadata like time and date for activity
+
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -19,7 +21,7 @@ WHERE
 export default async (req, res) => {
     if (req.method === 'POST') {
         const { uid, aid, name, date, duration } = req.body;
-        
+
         try {
             const values = [uid, aid, name, date, duration];
             await pool.query(query, values);
