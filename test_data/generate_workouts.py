@@ -1,20 +1,19 @@
 import asyncio
 import random
-import uuid
 from datetime import datetime, timedelta
 
 import pandas as pd
 import psycopg2
 
 # Configurable Parameters
-DATA_START_DATE = datetime(2020, 1, 1)
-DATA_END_DATE = datetime(2023, 12, 8)
+DATA_START_DATE = datetime(2023, 1, 1)
+DATA_END_DATE = datetime(2023, 12, 25)
 
 # Database Connection Parameters
-DB_HOST = "ep-polished-cherry-55480419-pooler.us-east-1.postgres.vercel-storage.com"
+DB_HOST = "ep-green-bird-78301737-pooler.us-east-1.postgres.vercel-storage.com"
 DB_NAME = "verceldb"
 DB_USER = "default"
-DB_PASSWORD = "Azy2srgWb9aU"
+DB_PASSWORD = "RcXhD7Ag9wUV"
 
 
 # Establish Database Connection
@@ -31,8 +30,6 @@ def parse_string_to_list(string_value):
 # Function to read users from CSV
 def read_users(file_path):
     users = pd.read_csv(file_path)
-    # add uid with uuid4()
-    users['uid'] = [str(uuid.uuid4()) for _ in range(len(users))]
     return users
 
 
@@ -112,7 +109,7 @@ def update_activity_level(user, current_date):
 
 def get_activity_frequency(activity_level):
     if activity_level == 'low':
-        value = 1
+        value = 2
     elif activity_level == 'medium':
         value = 3
     elif activity_level == 'high':
@@ -293,13 +290,13 @@ def write_activities_to_csv(activities_workouts_by_user, filename="activities.cs
                                                           seconds=random.randint(0, 59))
             end_time = start_time + duration
             activities_data.append({
-                "aid": activity['aid'],
-                "uid": uid,
-                "date": start_time.date(),
-                "start time": start_time.time(),
-                "end time": end_time.time(),
-                "duration": str(duration),
-                "favorite": random.randint(-10, 10)
+                "Aid": activity['aid'],
+                "Uid": uid,
+                "Date": start_time.date(),
+                "Start_time": start_time.time(),
+                "End_time": end_time.time(),
+                "Duration": str(duration),
+                "Favorite": random.randint(-10, 10)
             })
 
     activities_df = pd.DataFrame(activities_data)
@@ -313,92 +310,24 @@ def write_workouts_to_csv(activities_workouts_by_user, filename="workouts.csv"):
         for activity in activities:
             for sequence_num, workout in enumerate(activity['workouts'], start=1):
                 workouts_data.append({
-                    "aid": activity['aid'],
-                    "eid": workout['eid'],
-                    "sequence_num": sequence_num,
-                    "weight": workout['weight'],
-                    "rep": workout['reps'],
-                    "set": workout['sets']
+                    "Aid": activity['aid'],
+                    "Eid": workout['eid'],
+                    "Seq_num": sequence_num,
+                    "Weight": workout['weight'],
+                    "Rep": workout['reps'],
+                    "Set": workout['sets'],
+                    "Uid": uid,
                 })
 
     workouts_df = pd.DataFrame(workouts_data)
     workouts_df.to_csv(filename, index=False)
 
 
-def print_table_names():
-    conn = get_db_connection()
-    try:
-        with conn.cursor() as cur:
-            cur.execute("""
-                SELECT table_name 
-                FROM information_schema.tables 
-                WHERE table_schema = 'public'
-            """)
-            tables = cur.fetchall()
-            for table in tables:
-                print(table[0])
-    except Exception as e:
-        print("An error occurred:", e)
-    finally:
-        conn.close()
-
-
-def print_table_attributes():
-    conn = get_db_connection()
-    try:
-        with conn.cursor() as cur:
-            # First, fetch all table names
-            cur.execute("""
-                SELECT table_name 
-                FROM information_schema.tables 
-                WHERE table_schema = 'public'
-            """)
-            tables = cur.fetchall()
-
-            for table in tables:
-                table_name = table[0]
-                print(f"Table: {table_name}")
-
-                # Now, fetch column details for each table
-                cur.execute("""
-                    SELECT column_name, data_type 
-                    FROM information_schema.columns 
-                    WHERE table_schema = 'public' AND table_name = %s
-                """, (table_name,))
-                columns = cur.fetchall()
-
-                for column in columns:
-                    print(f"  Column: {column[0]}, Type: {column[1]}")
-
-    except Exception as e:
-        print("An error occurred:", e)
-    finally:
-        conn.close()
-
-
-def select_workout_weights():
-    conn = get_db_connection()
-    try:
-        with conn.cursor() as cur:
-            cur.execute('SELECT "Weight" FROM workouts')
-            weights = cur.fetchall()
-            for weight in weights:
-                print(weight[0])
-    except Exception as e:
-        print("An error occurred:", e)
-    finally:
-        conn.close()
-
-
 # Main execution
 async def main():
-    print_table_names()
-    print_table_attributes()
-    print(select_workout_weights())
     conn = get_db_connection()
     try:
-        users = read_users("users/users.csv")
-        # limit users to size 100
+        users = read_users("user_data.csv")
         assign_initial_values(users)
         activities_workouts_by_user = await generate_activities_and_workouts(users, conn)
         # write to activities.csv and workouts.csv
