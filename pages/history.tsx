@@ -1,27 +1,28 @@
 'use client'
-import React, { FC, useEffect, useState } from 'react';
 import DefLayout from '@/components/def_layout';
-import LoginLayout from '@/components/login_layout';  // !! FOR DEVELOPMENT ONLY
 import Image from 'next/image';
 import Link from 'next/link';
-import { useUser } from '@auth0/nextjs-auth0/client';
-import { setCookie, getCookie } from 'cookies-next';
-import '@/public/styles/history.css';     // style sheet for animations
-import { useRouter } from 'next/router';
+import React, { FC, useEffect, useState } from 'react';
+import { useUser }                        from '@auth0/nextjs-auth0/client';
+import { setCookie, getCookie }           from 'cookies-next';
+import { useRouter }                      from 'next/router';
+import StreakGraph from '@/pages/StreakGraph'; 
+import MuscleModel from '@/pages/MuscleModel'; 
 import '@/pages/StreakGraphs.css';
-import StreakGraph from '@/pages/StreakGraph'; // Adjust the path as needed
-import MuscleModel from '@/pages/MuscleModel'; // Adjust the path as needed
+import '@/public/styles/history.css';    
 
 // define type
 type DataType = {
   workouts: any[];
 };
 
+// date and duration for showing
 interface DataPoint {
   date: string;
   duration: number;
 }
 
+// exercise type
 interface Exercise {
   exerciseName: string;
   numberOfReps?: number;
@@ -35,9 +36,9 @@ interface Exercise {
 }
 
 const HistoryPage: FC = () => {
+  // auth 0 to route
   const router = useRouter();
 
-  console.log(getCookie('uid'));
   // ---- start of auth0 setup ----
   // set auth0 state
   const { user, error, isLoading } = useUser();
@@ -52,14 +53,13 @@ const HistoryPage: FC = () => {
   const [clickedIndex, setClickedIndex] = useState<number | null>(null);  // set if workout is clicked
   const [specificAid, setSpecificAid] = useState<number | null>(null);                   // specificAid of clicked workout   
 
-  // side bar
+  // side bar 
   const [weeksBefore, setWeeksBefore] = useState(1);  // weeks -- used to query by week in sidebar
   const [loading, setLoading] = useState(true);       // if data is being fetched for sidebar
 
+  // analytics information
   const [showGraph, setShowGraph] = useState(false);
-
   const [muscleGroups, setMuscleGroups] = useState([]);
-
   const toggleGraph = () => {
     setShowGraph(!showGraph);
   };
@@ -84,7 +84,7 @@ const HistoryPage: FC = () => {
       }
 
       const data = await response.json();
-      console.log("Exercise Data:", data); // Log to inspect the structure
+      console.log("got exercise data"); 
 
       return data.data.rows[0];
     } catch (error) {
@@ -92,7 +92,6 @@ const HistoryPage: FC = () => {
       return null;
     }
   };
-  // ---- end of API fn calls ----
 
   // get activities per week
   useEffect(() => {
@@ -131,8 +130,6 @@ const HistoryPage: FC = () => {
         }));
 
         setLoading(false);    // set loading to false now that data is fetched
-
-        console.log("Mapped Activities: ", mapActivities);  // Log the final data
         setActivityData(mapActivities);
       } catch (error) {
         console.error('Error in getting activity history:', error);
@@ -187,8 +184,9 @@ const HistoryPage: FC = () => {
       localStorage.setItem('aidTransfer', transfAID);
     }
   }, [specificAid]);
-  // ---- end of API calls with useEffect ----
-
+  
+  // this stuff and down is for template work
+  // add an activity if user currently not logging
   const addActivity = async () => {
     setCookie('log', 'true');       // sets cookie to show that user is logging workout
 
@@ -210,6 +208,7 @@ const HistoryPage: FC = () => {
     }
   };
 
+  // fetch highest aid per person
   const fetchAid = async () => {
     const response = await fetch('/api/getAID', {
       method: 'POST',
@@ -232,7 +231,7 @@ const HistoryPage: FC = () => {
     return parseInt(data.data.rows[0].Aid);
   };
 
-  // Add a new function to handle the Save click
+  // add a new function to handle the save click
   const handleSaveClick = async (workoutData: any[]) => {
     if (getCookie('log') === 'false') {
       await addActivity();
@@ -255,7 +254,6 @@ const HistoryPage: FC = () => {
       };
     });
 
-    console.log(exerciseArray);
     // Retrieve existing data from localStorage or initialize it as an empty array
     const existingDataString = localStorage.getItem('exercises');
     const existingData: Exercise[] = existingDataString
@@ -270,6 +268,7 @@ const HistoryPage: FC = () => {
 
     router.push('/log'); // Assuming '/log' is the path to Log2Page
   };
+  // ---- end of API fn calls ----
 
   // ---- start of random functions ----
   // getting weekRange
@@ -292,9 +291,7 @@ const HistoryPage: FC = () => {
       end: endOfWeek
     };
   };
-  // ---- end of random functions ----
-
-  // ---- start of reformating ----
+  
   // format interval to something readable and printable for activity
   function intervalToString(interval: any) {
     let str = '';
@@ -333,10 +330,9 @@ const HistoryPage: FC = () => {
     const { start, end } = getWeekRange(weeksBefore);
     return `${formatDateforRange(start)}-${formatDateforRange(end)}`;
   };
-  // ---- start of reformating ----
+  // ---- end of random functions ----
 
-
-  // trying to add graph
+  // ---- start of analytics information ----
   const [parsedData, setParsedData] = useState<DataPoint[]>([]);
   const [loadingGraph, setIsGraphLoading] = useState(false); // new state for loading indicator
   const [workoutTimeText, setWorkoutTimeText] = useState('');
@@ -396,7 +392,6 @@ const HistoryPage: FC = () => {
       }));
 
       setMuscleGroups(muscleGroups); // Update the state
-      console.log(muscleGroups);
     } catch (error) {
       console.error('Error in Bob:', error);
     }
@@ -436,8 +431,6 @@ const HistoryPage: FC = () => {
       setWorkoutTimeText(`${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`);
       setWorkoutChangeText(`${percentageChange.toFixed(1)}%`);
       setIsPositiveChange(percentageChange > 0);
-
-      console.log(formattedTime);
 
       return formattedTime; // This line returns the formatted time, which can be used elsewhere
     } catch (error) {
@@ -491,7 +484,7 @@ const HistoryPage: FC = () => {
     }
     setIsGraphLoading(false); // Set loading to false after fetching data
   };
-
+  // ---- end of analytics information ----
 
   return (
     <DefLayout>
@@ -680,7 +673,6 @@ const HistoryPage: FC = () => {
                           handleSaveClick(data.workouts);
                         } else {
                           console.log("No workout data to save");
-                          // Optionally, you could display a notification or alert to the user here.
                         }
                       }}
                       className="inline-flex items-center"
