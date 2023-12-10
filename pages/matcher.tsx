@@ -447,7 +447,7 @@ const Matcher: React.FC = () => {
 
                     <div className="h-[2px] w-[3vw] my-[2vh] bg-white bg-opacity-50"></div>
 
-                    <div className="text-center">Please have a gender to match :D</div>
+                    <div className="text-center">Please fill out your profile before matching :D</div>
 
                 </div>
 
