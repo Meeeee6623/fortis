@@ -22,9 +22,7 @@ const ProfilePage: React.FC = () => {
   // get userdata
   // get userdata from uid
   useEffect(() => {
-    console.log(getCookie('uid'));
     const fetchData = async () => {
-      console.log(getCookie('uid'));
       try {
 
         const response = await fetch('/api/getNamefromUID', {
@@ -42,10 +40,8 @@ const ProfilePage: React.FC = () => {
         }
 
         const data = await response.json();
-        console.log(data);
 
         const userdata = data.data.rows[0];
-        // setCookie('name', data.data.rows[0].name);
 
         setName(userdata.name);
         setAge(userdata.age);
@@ -54,8 +50,8 @@ const ProfilePage: React.FC = () => {
         setPrivacy(userdata.privacy);
         setAbout(userdata.about);
 
-        const inchesToCm = (inches: any) => inches * 2.54; // Conversion factor: 1 inch = 2.54 cm
-        const poundsToKg = (pounds: any) => pounds * 0.453592; // Conversion factor: 1 lb = 0.453592 kg
+        const inchesToCm = (inches: any) => inches * 2.54;      // Conversion factor: 1 inch = 2.54 cm
+        const poundsToKg = (pounds: any) => pounds * 0.453592;  // Conversion factor: 1 lb = 0.453592 kg
 
         if (userdata.unit === 'Metric') {
           // Convert height from inches to centimeters
@@ -95,7 +91,6 @@ const ProfilePage: React.FC = () => {
         }
 
         const data = await response.json();
-        console.log(data.data.rows[0].email);
         setEmail(data.data.rows[0].email);
         return data.data.rows[0].email;
       }
@@ -126,7 +121,6 @@ const ProfilePage: React.FC = () => {
         }
 
         const data = await response.json();
-        console.log(data.data.rows[0].email);
         setEmail(data.data.rows[0].email);
         return data.data.rows[0].email;
       }
@@ -167,7 +161,6 @@ const ProfilePage: React.FC = () => {
     }
 
     setCookie('units', units);
-    console.log(getCookie('units'));
 
     try {
       const response = await fetch('/api/updateUserData', {
@@ -298,7 +291,7 @@ const ProfilePage: React.FC = () => {
                   value={about}
                   onChange={(e) => handleTextareaChange(e.target.value)}
                   className="w-full text-left opacity-75 resize-y"
-                  rows={20} // Set the number of visible rows initially
+                  rows={20} // Set the number of visible rows initially to 20
                 />
                 <p>
                   Character Count: {about.length}/{characterLimit}
@@ -308,7 +301,7 @@ const ProfilePage: React.FC = () => {
               <textarea
                 value={`${about !== null ? about : '-'}`}
                 className="w-full text-left opacity-75 resize-y"
-                rows={20} // Set the number of visible rows initially
+                rows={20} // Set the number of visible rows initially to 20
               />
             )}
           </div>
@@ -433,7 +426,6 @@ const ProfilePage: React.FC = () => {
               ) : (
                 units
               )}
-
             </div>
 
             <div className="col-span-1">
@@ -451,7 +443,6 @@ const ProfilePage: React.FC = () => {
 
             </div>
           </div>
-
 
           <div className="h-[2px] w-[22vw] bg-white bg-opacity-50 my-5"></div>
 
