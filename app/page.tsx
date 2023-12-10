@@ -290,11 +290,11 @@ const Home: React.FC = () => {
               <h2 className="mb-4 text-[4vw] font-bold displayheader gradient-text-bp">DISCOVER</h2>
             </div>
 
-            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">View or Edit User Attributes</div>
-            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">View Past Workouts and Analytics</div>
-            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">Log a Workout</div>
-            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">Find Friends and Workout Buddies (To use friends, status must be public)</div>
-            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">Find Workout Templates By Other Users</div>
+            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">In the Profile Page, you can view or your edit user information, such as name, height, weight, gender, and about. You can also set your preferences for units of measurement and privacy status. You also have the option here to delete your account.</div>
+            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">In the History Page, you can view past workouts sorted by week and date. Each exercise in each workout has details including exercise name, muscle groups, set, reps, weight, etc. There are also workout analytics, where you can view your progress. </div>
+            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">In the Log Page, you can log your current workouts. There are four different options. You can start a new, empty workout, use a pre-existing workout template by other users, reuse a previous workout you did, or quick add a recent workout.</div>
+            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">In the Friends Page, you can view your friends list and add other users as friends. There is also a matcher feature to find workout buddies. Upon filling out a form, we will match you with other athletes with similar goals. To use friends, privacy status must be public</div>
+            <div className="text-sm mx-2 text-center overflow-y-auto flex flex-row items-center">In the Discover Page, you can find pre-existing workout templates by other users to use for yourself. You can filter these templates by workout type, and the results are sorted by popularity. You can also add your own workouts as templates in the History Page.</div>
 
 
             <div className="flex flex-row justify-center">
