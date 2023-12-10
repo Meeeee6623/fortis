@@ -135,7 +135,7 @@ const DiscoverPage2: React.FC = () => {
                     },
                     // body: JSON.stringify({ eid })
                     body: JSON.stringify({
-                        aid: activity.Aid,
+                        searchQuery: activity.Aid,
                     }),
                 });
 
