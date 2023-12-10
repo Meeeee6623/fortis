@@ -46,7 +46,7 @@ export default async (req, res) => {
         try {
             // Insert user
             const values = [`${searchQuery}`];
-            console.log('please work');
+            console.log('getMatcher.js');
             const results = await pool.query(matchyboo, values);
 
             res.json({ success: true, data: results });

@@ -20,10 +20,10 @@ export default async (req, res) => {
         try {
             const results = await pool.query(searchUserName, [searchQuery]);
 
-            console.log('Success! GetUIDfromEmail');
+            console.log('Success! getNamefromUID');
             res.json({ success: true, data: results });
         } catch (err) {
-            console.log('Error in GetUIDfromEmail');
+            console.log('Error in getNamefromUID');
             console.error(err);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }

@@ -19,12 +19,11 @@ export default async (req, res) => {
         try {
             // Insert user
             const values = [`%${searchQuery}%`];
-            console.log('hi');
+            console.log('getEID.js');
             const results = await pool.query(getEID, values);
 
             res.json({ success: true, data: results });
         } catch (err) {
-            console.log('hello');
             console.error(err);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }

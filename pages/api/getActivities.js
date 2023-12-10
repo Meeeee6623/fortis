@@ -27,10 +27,10 @@ export default async (req, res) => {
             const values = [`${searchQuery}`, aid];
             const results = await pool.query(History, values);
 
-            console.log('Success! HistoryActivities');
+            console.log('Success! getActivities');
             res.json({ success: true, data: results });
         } catch (err) {
-            console.log('Error in HistoryActivites');
+            console.log('Error in getActivites');
             console.error(err);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }

@@ -18,12 +18,12 @@ export default async (req, res) => {
 
         try {
             // Insert user
-            console.log('Success! InsertAuthUser');
+            console.log('Success! insertUserData.js');
             await pool.query(insertUser, [uid, name]);
 
             res.status(200).send('Data saved successfully');
         } catch (err) {
-            console.log('Error in InsertAuthUser');
+            console.log('Error in insertUserData.js');
             console.error(err);
             res.status(500).json({ error: err.message });
         }
