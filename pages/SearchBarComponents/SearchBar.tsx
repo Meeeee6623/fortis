@@ -57,6 +57,7 @@ const SearchBar: React.FC<SearchResultsListProps> = ({ sendDataToA, group, gym, 
       }
 
       const data = await response.json();
+      console.log(data);
       const category = workout_muscle_map[group];
       const filteredRows = data.data.rows.filter((row: ExerciseData) => {
         if (category.includes(row.muscle_group)) {
@@ -85,6 +86,7 @@ const SearchBar: React.FC<SearchResultsListProps> = ({ sendDataToA, group, gym, 
       }
 
       const data = await response.json();
+      console.log(data);
       const category = workout_muscle_map[group];
       const filteredRows = data.data.rows.filter((row: ExerciseData) => {
         if (category.includes(row.muscle_group)) {
