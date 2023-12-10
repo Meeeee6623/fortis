@@ -30,15 +30,6 @@ const PrivacyOptionsDialog = ({ onClose, onSave }) => {
           <label>
             <input
               type="radio"
-              value="-1"
-              checked={selectedOption === '-1'}
-              onChange={() => handleOptionChange('-1')}
-            />
-            Private
-          </label>
-          <label>
-            <input
-              type="radio"
               value="-2"
               checked={selectedOption === '-2'}
               onChange={() => handleOptionChange('-2')}
