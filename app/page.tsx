@@ -62,7 +62,7 @@ const Home: React.FC = () => {
       const data = await response.json();
       setCookie('uid', data.data.rows[0].uid);
       setCookie('login', 'true');
-      console.log("Got UID in Home: ", getCookie('uid'));
+      // console.log("Got UID in Home: ", getCookie('uid'));
       return data.data.rows[0].uid;
     }
     catch {
@@ -244,7 +244,7 @@ const Home: React.FC = () => {
   }
   if (getCookie('login') === 'true') {
     setCookies();
-    console.log("updated cookie", getCookie('uid'));
+    // console.log("updated cookie", getCookie('uid'));
   }
   // ---- end of auth0 logic ----
 
