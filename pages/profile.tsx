@@ -1,128 +1,26 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { FC, useState, useEffect } from 'react';
 import DefLayout from '@/components/def_layout';
+import React, { FC, useState, useEffect } from 'react';
 import { setCookie, getCookie } from 'cookies-next';
-import '@/public/styles/profile.css';     // style sheet for animations
-import DeleteConfirmation from '@/components/DeleteConfirmation';
 import { useRouter } from 'next/router';
+import DeleteConfirmation from '@/components/DeleteConfirmation';
+import '@/public/styles/profile.css';     // style sheet for animations
 
 const ProfilePage: React.FC = () => {
+  // set states for display
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [age, setAge] = useState(30);
-  const [height, setHeight] = useState(175); // in centimeters
-  const [weight, setWeight] = useState(70); // in kilograms
+  const [height, setHeight] = useState(175);  // in inches
+  const [weight, setWeight] = useState(70);   // in lb
   const [gender, setGender] = useState('Male');
   const [units, setUnits] = useState('Imperial');
   const [privacy, setPrivacy] = useState("Public");
   const [about, setAbout] = useState('');
 
-  const characterLimit = 500;
-
-  // Define state variables to track edit mode
-  const [isEditing, setIsEditing] = useState(false);
-
-  const router = useRouter();
-
-  const handleEditClick = (reload: boolean) => {
-    setIsEditing(!isEditing);
-
-    if (reload) {
-      window.location.reload();
-    }
-  };
-
-  const [showConfirmation, setShowConfirmation] = useState(false);
-
-  const handleDelete = () => {
-    // Show the confirmation dialog
-    setShowConfirmation(true);
-  };
-
-  const handleCancelDelete = () => {
-    // Hide the confirmation dialog
-    setShowConfirmation(false);
-  };
-
-  const handleConfirmDelete = async () => {
-    setShowConfirmation(false); // Hide the confirmation dialog after successful deletion
-    await deleteUser();
-    await setCookie('uid', 'no id');
-    router.push('/api/auth/logout');
-  };
-
-
-  const handleUpdateUserData = async () => {
-    handleEditClick(false);
-
-    let heightToSend = height;
-    let weightToSend = weight;
-
-    if (units === 'Metric') {
-      // Convert height from centimeters to inches for Imperial units
-      heightToSend = Math.round(height / 2.54);
-
-      // Convert weight from kilograms to pounds for Imperial units
-      weightToSend = Math.round(weight / 0.453592);
-    }
-
-    // setCookie('name', name);
-    setCookie('units', units);
-    console.log(getCookie('units'));
-
-    try {
-      const response = await fetch('/api/updateUserData', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          uid: getCookie('uid'),
-          name: name,
-          age: age,
-          height: heightToSend,
-          weight: weightToSend,
-          gender: gender,
-          units: units,
-          privacy: privacy,
-          about: about
-        }),
-      });
-
-      if (response.status === 200) {
-        console.log('User data updated successfully');
-      } else {
-        console.error('Failed to update user data');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-
-  const deleteUser = async () => {
-
-    try {
-      const response = await fetch('/api/deleteUser', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          uid: getCookie('uid'),
-        }),
-      });
-
-      if (response.status === 200) {
-        console.log('User deleted  successfully');
-      } else {
-        console.error('Failed to delete user');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-
+  // get userdata
+  // get userdata from uid
   useEffect(() => {
     console.log(getCookie('uid'));
     const fetchData = async () => {
@@ -209,15 +107,7 @@ const ProfilePage: React.FC = () => {
     fetchData();
   }, []);
 
-  const handleNameChange = (e:any) => {
-    const inputValue = e.target.value;
-
-    const nameLimit = 70;
-    if (inputValue.length <= nameLimit) {
-      setName(inputValue);
-    }
-  };
-
+  // get user email data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -248,6 +138,67 @@ const ProfilePage: React.FC = () => {
     fetchData();
   }, []);
 
+  // char limit for about me
+  const characterLimit = 500;
+
+  // Define state variables to track edit mode
+  const [isEditing, setIsEditing] = useState(false);
+  const handleEditClick = (reload: boolean) => {
+    setIsEditing(!isEditing);
+
+    if (reload) {
+      window.location.reload();
+    }
+  };
+
+  // handle update user
+  const handleUpdateUserData = async () => {
+    handleEditClick(false);
+
+    let heightToSend = height;
+    let weightToSend = weight;
+
+    if (units === 'Metric') {
+      // Convert height from centimeters to inches for Imperial units
+      heightToSend = Math.round(height / 2.54);
+
+      // Convert weight from kilograms to pounds for Imperial units
+      weightToSend = Math.round(weight / 0.453592);
+    }
+
+    setCookie('units', units);
+    console.log(getCookie('units'));
+
+    try {
+      const response = await fetch('/api/updateUserData', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: getCookie('uid'),
+          name: name,
+          age: age,
+          height: heightToSend,
+          weight: weightToSend,
+          gender: gender,
+          units: units,
+          privacy: privacy,
+          about: about
+        }),
+      });
+
+      if (response.status === 200) {
+        console.log('User data updated successfully');
+      } else {
+        console.error('Failed to update user data');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  // convert units if they change unit
   const setUnitsAndConvert = (newUnits: any) => {
     if (units === 'Imperial' && newUnits === 'Metric') {
       // Convert height from inches to centimeters
@@ -275,9 +226,62 @@ const ProfilePage: React.FC = () => {
     setUnits(newUnits);
   };
 
+  // handle changing about me (also with 500 character limit)
   const handleTextareaChange = (e: any) => {
     if (e.length <= characterLimit) {
       setAbout(e);
+    }
+  };
+  
+  // handle delete
+  // to reroute
+  const router = useRouter();
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const handleDelete = () => {
+    // Show the confirmation dialog
+    setShowConfirmation(true);
+  };
+  const handleCancelDelete = () => {
+    // Hide the confirmation dialog
+    setShowConfirmation(false);
+  };
+  const handleConfirmDelete = async () => {
+    setShowConfirmation(false); // Hide the confirmation dialog after successful deletion
+    await deleteUser();
+    await setCookie('uid', 'no id');
+    router.push('/api/auth/logout');
+  };
+
+  // fun to delete user
+  const deleteUser = async () => {
+    try {
+      const response = await fetch('/api/deleteUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: getCookie('uid'),
+        }),
+      });
+
+      if (response.status === 200) {
+        console.log('User deleted  successfully');
+      } else {
+        console.error('Failed to delete user');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  // handle changes to name -- limit to 70
+  const handleNameChange = (e:any) => {
+    const inputValue = e.target.value;
+
+    const nameLimit = 70;
+    if (inputValue.length <= nameLimit) {
+      setName(inputValue);
     }
   };
 
