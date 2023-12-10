@@ -9,15 +9,16 @@ const pool = new Pool({
 const History = `
     SELECT *
     FROM workouts
-    WHERE workouts."Aid" = $1
+    WHERE workouts."Aid" = $1 AND workouts."Uid" = $2
     ORDER BY workouts."Seq_num";
 `;
 
 export default async (req, res) => {
     if (req.method === 'POST') {
         const searchQuery = req.body.searchQuery;
+        const uid = req.body.uid;
         try {
-            const values = [`${searchQuery}`];
+            const values = [`${searchQuery}`, uid];
 
             console.log('Success! TemplateWorkouts');
             const results = await pool.query(History, values);
