@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import DefLayout from '@/components/def_layout';
 import Select from 'react-select';
-import SearchBar from "./SearchBarComponents/SearchBar";
+import SearchBar from "../components/SearchBarComponents/SearchBar";
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { setCookie, getCookie } from 'cookies-next';
 import { GetServerSideProps } from 'next';

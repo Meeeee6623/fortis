@@ -1,7 +1,3 @@
-// SearchResultsList.tsx
-
-
-// SearchResultsList.tsx
 import React from "react";
 import SharedResultsDiv from "./SharedResultsDiv";
 import "./SearchResultsList.css";
