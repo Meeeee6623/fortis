@@ -1,3 +1,5 @@
+// get user information (name) using uid
+
 import { Pool } from 'pg';
 
 const pool = new Pool({

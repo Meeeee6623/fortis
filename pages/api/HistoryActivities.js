@@ -1,3 +1,5 @@
+// get user's previous activities
+
 import { Pool } from 'pg';
 
 const pool = new Pool({

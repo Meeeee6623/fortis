@@ -1,30 +1,5 @@
-//   // USELESS STUFF, JUST CHECKING
-//   const getUID = async (query: any) => {
-//     const response = await fetch('/api/getUIDfromEmail', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         searchQuery: query
-//       }),
-//     });
-
-//     if (!response.ok) {
-//       throw new Error('Failed to save query');
-//     }
-
-//     const data = await response.json();
-//     console.log(data)
-//   };
-
-//     // END OF USELESS STUFF, JUST CHECKING
-
-
-
-// WHen you click a button: 
-//   "   getUIDfromEmail(value);    "  <-   This needs to be called.
-
+// get user data using email 
+// since email is unique 
 
 import { Pool } from 'pg';
 

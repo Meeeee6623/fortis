@@ -14,7 +14,7 @@ const searchUserUID = `
     `;
 
 export default async (req, res) => {
-    console.log("api is called at getUIDfromName");
+    console.log("api is called at getInfofromName");
     if (req.method === 'POST') {
         try {
             const name = req.body.name;
@@ -22,7 +22,7 @@ export default async (req, res) => {
             const values = [`%${name}%`];
             // console.log(values);
             const result = await pool.query(searchUserUID, values);
-            
+
             res.json({ success: true, data: result });
         } catch (err) {
             console.error('Error in getting UID, problem in API:', err);

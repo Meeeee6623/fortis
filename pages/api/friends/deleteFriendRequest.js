@@ -13,7 +13,7 @@ WHERE ("Sender" = $1 AND "Receiver" = $2) OR
 `;
 
 export default async (req, res) => {
-    console.log("this is called at least");
+    console.log("api/friends/delete is at least working");
     if (req.method === 'POST') {
         const { sender, receiver } = req.body;
         console.log(sender, receiver);

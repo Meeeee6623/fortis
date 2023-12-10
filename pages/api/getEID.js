@@ -1,34 +1,4 @@
-
-
-//   // USELESS STUFF, JUST CHECKING
-//   const getEID = async (query: any) => {
-//     const response = await fetch('/api/getEID', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         searchQuery: query
-//       }),
-//     });
-
-//     if (!response.ok) {
-//       throw new Error('Failed to save query');
-//     }
-
-//     const data = await response.json();
-//     console.log(data)
-//   };
-
-//     // END OF USELESS STUFF, JUST CHECKING
-
-
-
-// WHen you click a button: 
-//   "   getEID(value);    "  <-   This needs to be called.
-
-
-
+// get eid using the name of the exercise
 import { Pool } from 'pg';
 
 const pool = new Pool({

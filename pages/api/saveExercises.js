@@ -10,8 +10,6 @@ INSERT INTO workouts ("Uid", "Aid", "Seq_num", "Eid", "Weight", "Rep", "Set", "T
 VALUES ($1, $2, DEFAULT, $3, $4, $5, $6, $7, $8);
 `;
 
-// ... rest of your imports and setup ...
-
 export default async (req, res) => {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });

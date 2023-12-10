@@ -1,3 +1,6 @@
+// find a buddy using matcher 
+// by matching hard requirements 
+
 import { Pool } from 'pg';
 
 const pool = new Pool({

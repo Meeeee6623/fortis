@@ -1,3 +1,4 @@
+// get filtered exercises based on muscle group
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -17,10 +18,10 @@ export default async (req, res) => {
 
         try {
             // Insert user
-           //const values = [${searchQuery}$`];
+            //const values = [${searchQuery}$`];
             console.log('hi', searchQuery);
             const results = await pool.query(FilterExcMuscle, [searchQuery]);
-            
+
             res.json({ success: true, data: results });
         } catch (err) {
             console.log('hello');

@@ -1,4 +1,4 @@
-// get workout information for tempalte in discover
+// get workout information for template in discover
 import { Pool } from 'pg';
 
 const pool = new Pool({

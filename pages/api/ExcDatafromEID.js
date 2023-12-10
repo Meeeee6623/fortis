@@ -1,33 +1,4 @@
-//   // USELESS STUFF, JUST CHECKING
-//   const HistoryActivities = async (query: any) => {
-//     const response = await fetch('/api/HistoryActivites', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         searchQuery: "b24e24f4-86b8-4b83-8947-b2472a43b436"
-//         //query
-//       }),
-//     });
-
-//     if (!response.ok) {
-//       throw new Error('Failed to save query');
-//     }
-
-//     const data = await response.json();
-//     console.log(data)
-//   };
-
-//     // END OF USELESS STUFF, JUST CHECKING
-
-
-
-// WHen you click a button: 
-//   "   HistoryActivities(value);    "  <-   This needs to be called.
-
-
-
+// get all data related to an exercise using eid
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -47,8 +18,8 @@ export default async (req, res) => {
         try {
             const values = [`${searchQuery}`];
             const results = await pool.query(History, values);
-            
-        //    console.log('Success! ExcDatafromEID');
+
+            //    console.log('Success! ExcDatafromEID');
             res.json({ success: true, data: results });
         } catch (err) {
             console.log('error in ExcDatafromEID');

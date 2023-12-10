@@ -1,3 +1,4 @@
+// get data to display streaks (github like thing)
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -10,7 +11,7 @@ const Streaks = `
     FROM activity
     WHERE activity."Uid" = $1
     ORDER BY "Date" DESC;
-    `; 
+    `;
 
 
 export default async (req, res) => {
@@ -21,7 +22,7 @@ export default async (req, res) => {
             const values = [`${searchQuery}`];
             //console.log('yippers');
             const results = await pool.query(Streaks, values);
-            
+
             res.json({ success: true, data: results });
         } catch (err) {
             console.log('hola');
@@ -32,4 +33,3 @@ export default async (req, res) => {
         res.status(405).end();  // Method Not Allowed
     }
 };
-    

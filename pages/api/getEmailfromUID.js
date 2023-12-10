@@ -1,3 +1,6 @@
+// uid and email are unique 
+// get email from uid
+
 import { Pool } from 'pg';
 
 const pool = new Pool({

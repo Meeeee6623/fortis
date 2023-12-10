@@ -1,3 +1,4 @@
+// add new activity
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -24,6 +25,6 @@ export default async (req, res) => {
             res.status(500).json({ error: 'Internal Server Error' });
         }
     } else {
-        res.status(405).json({ error: 'Method Not Allowed' });  
+        res.status(405).json({ error: 'Method Not Allowed' });
     }
 };

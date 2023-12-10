@@ -1,3 +1,5 @@
+// get the matcher data for a particular user
+
 import { Pool } from 'pg';
 
 const pool = new Pool({
