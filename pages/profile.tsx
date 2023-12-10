@@ -270,7 +270,7 @@ const ProfilePage: React.FC = () => {
       setHeight(Math.round(heightInInches));
       setWeight(Math.round(weightInLb));
     }
-
+    
     // Set the units state
     setUnits(newUnits);
   };
@@ -351,7 +351,7 @@ const ProfilePage: React.FC = () => {
                 <input
                   type="number"
                   value={age}
-                  onChange={(e) => setAge(Number(e.target.value))}
+                  onChange={(e) => Number(e.target.value) >= 0 ? setAge(Number(e.target.value)) : null}
                   className="w-full text-right opacity-75"
                 />
               ) : (
@@ -368,7 +368,7 @@ const ProfilePage: React.FC = () => {
                   <input
                     type="number"
                     value={height !== null ? height : ''}
-                    onChange={(e) => setHeight(Number(e.target.value))}
+                    onChange={(e) => Number(e.target.value) >= 0 ? setHeight(Number(e.target.value)) : null}
                     className="w-full text-right"
                   />
                   <div className="ml-1">{units === 'Imperial' ? 'in' : 'cm'}</div>
@@ -387,7 +387,7 @@ const ProfilePage: React.FC = () => {
                   <input
                     type="number"
                     value={weight !== null ? weight : ''}
-                    onChange={(e) => setWeight(Number(e.target.value))}
+                    onChange={(e) => Number(e.target.value) >= 0 ? setWeight(Number(e.target.value)) : null}
                     className="w-full text-right"
                   />
                   <div className="ml-1">{units === 'Imperial' ? 'lb' : 'kg'}</div>
