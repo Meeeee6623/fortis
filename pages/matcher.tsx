@@ -3,27 +3,12 @@ import Link from 'next/link';
 import React, { FC, useEffect, useState } from 'react';
 import DefLayout from '@/components/def_layout';
 
-import SearchBar from "../components/SocialSearchBarComponents/SearchBar";
-import SearchResultsList from "../components/SocialSearchBarComponents/SearchResultsList";
-import styleform from './WorkoutBuddyMatcher.module.css';
-
-import Modal from './modal'; // Make sure you have this component created
-import WorkoutBuddyMatcher from './WorkoutBuddyMatcher'; // This is the separate form component
-import styles from './WorkoutBuddy.module.css';
+import Modal from './modal';
+import WorkoutBuddyMatcher from './WorkoutBuddyMatcher';
 import { getCookie } from 'cookies-next';
-import Styles from './social.module.css';
 import '@/public/styles/matcher.css';
 
-const searchBarStyle = {
-    // backgroundColor: '#aaa',
-    margin: 'auto',
-    width: '40%',
-    display: 'flex',
-    flexDirection: 'column' as 'column',
-    alignItems: 'center',
-    minWidth: '200px',
-};
-
+// Person interface for matcher data
 interface Person {
     uid: string;
     name: string;
@@ -32,27 +17,15 @@ interface Person {
     softPreferences: string;
     frequency: string;
     gymAvailability: string;
-    // Add other fields as needed
-}
-
-interface FlexiblePerson {
-    uid: string;
-    name: string;
-    age?: number | null;
-    height?: number | null;
-    weight?: number | null;
-    gender?: string | null;
-    unit?: string;
-    privacy?: string;
-    about?: string;
 }
 
 interface MatchedPersonDisplayProps {
     person: Person;
 }
 
+// Component for displaying individual matched person's information
 const MyDisplay: React.FC<MatchedPersonDisplayProps> = ({ person }) => {
-    // Function to parse frequency and workout types to a more readable format
+    // Parse frequency and workout types to a more readable format
     const parseList = (listString: string) => {
         return listString.replace(/[{}"]/g, '').split(',').join(', ');
     };
@@ -66,6 +39,7 @@ const MyDisplay: React.FC<MatchedPersonDisplayProps> = ({ person }) => {
             .join(', ');
     };
 
+    // State for controlling show more/less functionality
     const [showMore, setShowMore] = useState<boolean>(false);
 
     const toggleShowMore = () => {
@@ -101,8 +75,9 @@ const MyDisplay: React.FC<MatchedPersonDisplayProps> = ({ person }) => {
     );
 };
 
+// Component for displaying matched persons
 const MatchedPersonDisplay: React.FC<MatchedPersonDisplayProps> = ({ person }) => {
-    // Function to parse frequency and workout types to a more readable format
+    // Parse frequency and workout types to a more readable format
     const parseList = (listString: string) => {
         return listString.replace(/[{}"]/g, '').split(',').join(', ');
     };
@@ -121,13 +96,13 @@ const MatchedPersonDisplay: React.FC<MatchedPersonDisplayProps> = ({ person }) =
         let receiverUid;
 
         try {
-            // Fetch the UID for the person to whom the friend request will be sent
+            // Fetch the UID for the receiving person
             const response = await fetch('/api/friends/getUIDfromName', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: person.name }), // Assuming `person.name` is used to fetch UID
+                body: JSON.stringify({ name: person.name }),
             });
 
             if (response.ok) {
@@ -135,11 +110,11 @@ const MatchedPersonDisplay: React.FC<MatchedPersonDisplayProps> = ({ person }) =
                 receiverUid = data.uid;
             } else {
                 console.error('Response not OK when getting UID');
-                return; // Stop further execution if UID fetch fails
+                return;
             }
         } catch (error) {
             console.error('Error in getting uid from name:', error);
-            return; // Stop further execution if there's an error
+            return;
         }
 
         try {
@@ -153,7 +128,7 @@ const MatchedPersonDisplay: React.FC<MatchedPersonDisplayProps> = ({ person }) =
             });
 
             if (friendRequestResponse.ok) {
-                console.log(`Friend request sent to ${receiverUid}`);
+                console.log(`Friend request sent!`);
             } else {
                 console.error('Error sending friend request:', friendRequestResponse.statusText);
             }
@@ -214,171 +189,23 @@ const MatchedPersonDisplay: React.FC<MatchedPersonDisplayProps> = ({ person }) =
     );
 };
 
-interface FlexiblePersonListProps {
-    people: FlexiblePerson[];
-    onAcceptFriendRequest?: (receiver: any, sender: string) => void;
-    onRejectFriendRequest?: (receiver: any, sender: string) => void;
-}
 
-
-const FlexiblePersonList: React.FC<FlexiblePersonListProps> = ({ people, onAcceptFriendRequest, onRejectFriendRequest }) => {
-    const receiverUid = getCookie('uid');
-    return (
-        <ul className={styles.flexiblePersonList}>
-            {people.map(person => (
-                <li key={person.uid} className={styles.flexiblePersonItem}>
-                    <p>Name: {person.name || 'Not specified'}</p>
-                    <p>Age: {person.age !== null ? person.age : 'Not specified'}</p>
-                    <p>Height: {person.height !== null ? `${person.height} cm` : 'Not specified'}</p>
-                    <p>Weight: {person.weight !== null ? `${person.weight} kg` : 'Not specified'}</p>
-                    <p>Gender: {person.gender || 'Not specified'}</p>
-                    <p>Unit: {person.unit || 'Not specified'}</p>
-                    <p>Privacy: {person.privacy || 'Not specified'}</p>
-                    <p>About: {person.about || 'Not specified'}</p>
-                    {onAcceptFriendRequest && (
-                        <button onClick={() => onAcceptFriendRequest(receiverUid, person.uid)}>
-                            Accept Friend Request
-                        </button>
-                    )}
-                    {onRejectFriendRequest && (
-                        <button onClick={() => onRejectFriendRequest(receiverUid, person.uid)}>
-                            Reject Friend Request
-                        </button>
-                    )}
-
-                </li>
-            ))}
-        </ul>
-    );
-};
-
-
+// Matcher component - main component for the page
 const Matcher: React.FC = () => {
     const [showMatcherForm, setShowMatcherForm] = useState(false);
     const [matchedPersons, setMatchedPersons] = useState<Person[]>([]);
     const [myData, setMyData] = useState<Person[]>([]);
 
-    const [friendsList, setFriendsList] = useState<FlexiblePerson[]>([]);
-    const [pendingFriends, setPendingFriends] = useState<FlexiblePerson[]>([]);
-    const [friendRequests, setFriendRequests] = useState<FlexiblePerson[]>([]);
-
-
-
-    const friendslist = async (query: any) => {
-        const response = await fetch('/api/friends/friendList', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                searchQuery: getCookie('uid'),
-            }),
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to save query');
-        }
-
-        const data = await response.json();
-        console.log("Here are your friends: ", data.data);
-        setFriendsList(data.data);
-    };
-
-    const friendsPending = async (query: any) => {
-        const response = await fetch('/api/friends/friendPending', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                searchQuery: getCookie('uid'),
-            }),
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to save query');
-        }
-
-        const data = await response.json();
-        console.log("Pending friends :( ", data.data);
-        setPendingFriends(data.data);
-    };
-
-
-    const friendLanding = async (query: any) => {
-        const response = await fetch('/api/friends/friendLanding', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                searchQuery: getCookie('uid'),
-            }),
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to save query');
-        }
-
-        const data = await response.json();
-        console.log("Here the people who have sent you a friend request: ", data.data);
-        setFriendRequests(data.data);
-    };
-
-
+    // Toggle visibility of the matcher form
     const toggleMatcherForm = () => setShowMatcherForm(!showMatcherForm);
 
+    // Fetch data when component mounts
     useEffect(() => {
-        getMatcher("monkey banana");
+        getMatcher("");
         getMyData("");
-        friendslist("Monkey");
-        friendLanding("Monkey");
-        friendsPending("Monkey");
     }, []);
 
-    const handleAcceptFriendRequest = async (receiver: any, sender: any) => {
-        try {
-            console.log(receiver, sender);
-            const response = await fetch('/api/friends/acceptFriendRequest', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ receiver, sender }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to accept friend request');
-            }
-
-            // Optionally, update your state or UI based on the successful acceptance
-            console.log(`Friend request from ${sender} to ${receiver} accepted`);
-        } catch (error) {
-            console.error('Error accepting friend request:', error);
-        }
-    };
-
-    const handleRejectFriendRequest = async (receiver: any, sender: any) => {
-        try {
-            const response = await fetch('/api/friends/deleteFriendRequest', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ receiver, sender }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to reject friend request');
-            }
-
-            // Optionally, update your state or UI based on the successful rejection
-            console.log(`Friend request from ${sender} to ${receiver} rejected`);
-        } catch (error) {
-            console.error('Error rejecting friend request:', error);
-        }
-    };
-
+    // Fetch matched persons
     const getMatcher = async (query: any) => {
         const response = await fetch('/api/getMatcher', {
             method: 'POST',
@@ -395,14 +222,14 @@ const Matcher: React.FC = () => {
         }
 
         const data = await response.json();
-        console.log('API response:', data); // Log the full response
         if (data && data.data.rows) {
             setMatchedPersons(data.data.rows);
         } else {
-            console.log('No rows in response'); // Log if no rows are found
+            console.log('No rows in response');
         }
     };
 
+    // Fetch user's own data
     const getMyData = async (query: any) => {
         const response = await fetch('/api/getMatcherData', {
             method: 'POST',
@@ -421,9 +248,8 @@ const Matcher: React.FC = () => {
         const data = await response.json();
         if (data && data.data.rows) {
             setMyData(data.data.rows);
-            console.log(data.data.rows);
         } else {
-            console.log('No rows in response'); // Log if no rows are found
+            console.log('No rows in response');
         }
     };
 
