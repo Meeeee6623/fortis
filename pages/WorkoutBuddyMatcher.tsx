@@ -3,8 +3,8 @@ import Link from 'next/link';
 import React, { FC, useState } from 'react';
 import DefLayout from '@/components/def_layout';
 
-import SearchBar from "./SocialSearchBarComponents/SearchBar";
-import SearchResultsList from "./SocialSearchBarComponents/SearchResultsList";
+import SearchBar from "../components/SocialSearchBarComponents/SearchBar";
+import SearchResultsList from "../components/SocialSearchBarComponents/SearchResultsList";
 import styles from './WorkoutBuddyMatcher.module.css';
 import { setCookie, getCookie } from 'cookies-next';
 

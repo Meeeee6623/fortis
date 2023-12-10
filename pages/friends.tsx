@@ -4,7 +4,7 @@ import Link from 'next/link';
 import React, { FC, useEffect, useState } from 'react';
 import DefLayout from '@/components/def_layout';
 
-import SearchBar from "./SocialSearchBarComponents/SearchBar";
+import SearchBar from "../components/SocialSearchBarComponents/SearchBar";
 // import SearchResultsList from "./SocialSearchBarComponents/SearchResultsList";
 // import styleform from './WorkoutBuddyMatcher.module.css';
 
