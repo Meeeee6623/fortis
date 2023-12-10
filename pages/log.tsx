@@ -3,13 +3,11 @@ import Link from 'next/link';
 import DefLayout from '@/components/def_layout';
 import Select from 'react-select';
 import SearchBar from "../components/SearchBarComponents/SearchBar";
-import { useUser } from '@auth0/nextjs-auth0/client';
 import { setCookie, getCookie } from 'cookies-next';
 import { GetServerSideProps } from 'next';
 import React, { FC, useState, useEffect, ChangeEvent, useContext } from 'react';
 import '@/public/styles/log.css';     // style sheet for animations
 import { useRouter } from 'next/router';
-// import ExerciseContext, { useExerciseContext, ExerciseProvider } from './ExerciseContext';
 
 // exercise type
 interface Exercise {
@@ -39,8 +37,6 @@ type GymState = {
 
 const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   // ---- start of use state declarations + other declarations ----
-  // const { selectedExercise } = useExerciseContext();
-  // const { selectedExercise } = useContext(ExerciseContext);
   const [loading, setLoading] = useState(true);       // if data is being fetched for sidebar
   const [activityData, setActivityData] = useState<any[]>([]);
   const [data, setData] = useState<DataType[]>([]);
@@ -80,6 +76,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   const router = useRouter(); // use for redirecting to different pages
 
   // is show all exercises open
+  // default to true
   const toggleSidePanel = () => {
     setIsSidePanelOpen(!isSidePanelOpen);
   };
@@ -89,6 +86,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     setCurrentExercise({ ...currentExercise, exerciseName: data.name, eid: data.eid });
   };
 
+  // Fetch exercise data from eid
   const ExcDatafromEID = async (query: any) => {
     try {
       const response = await fetch('/api/ExcDatafromEID', {
@@ -104,7 +102,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
         throw new Error('Failed to fetch exercise data');
       }
       const data = await response.json();
-      // console.log("Exercise Data:", data); // Log to inspect the structure
+      // Log to inspect the structure
       return data.data.rows[0];
     } catch (error) {
       console.error('Error fetching exercise data:', error);
@@ -130,6 +128,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     setButtonStyles(updatedButtonStyles);
   };
 
+  // Fetch templates from the database for quick add
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true); // set loading to true while data is being fetched
@@ -184,8 +183,8 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
           };
         }));
 
-        console.log(mapActivities); // This will contain both activity and workout data
-        console.log(mapActivities[0].workouts);
+        // console.log(mapActivities); // This will contain both activity and workout data
+        // console.log(mapActivities[0].workouts);
 
         setActivityData(mapActivities);
         setLoading(false); // set loading to false now that data is fetched
@@ -196,7 +195,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     };
 
     fetchData();
-    console.log("data", data);
+    // console.log("data", data); // This will have the activity data
   }, []);
 
   // use state for exercise
@@ -414,7 +413,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     if (actionMeta.action === 'select-option') {
       const selectedExerciseName = selectedOption ? selectedOption.value : '';
 
-      console.log(selectedOption);
+      // console.log(selectedOption);
 
       // Find the eid that matches the selected exercise name
       const eidIndex = exerciseOptions.findIndex(name => name === selectedExerciseName);
@@ -483,7 +482,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
     });
 
     try {
-      console.log(modifiedExercises);
+      // console.log(modifiedExercises);
       const response = await fetch('/api/saveExercises', {
         method: 'POST',
         headers: {
@@ -491,7 +490,6 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
         },
         body: JSON.stringify(modifiedExercises)
       });
-      // console.log(response)
       // console.log('Response body:', await response.text());
 
       if (!response.ok) {
@@ -622,6 +620,7 @@ const Log2Page: React.FC<{ isLogging: boolean }> = ({ isLogging }) => {
   // ---- end of local storage for data persistance ----
 
 
+  // some styling needed for search bar and search bar components
   // ---- start of styling ----
   const searchBarStyle = {
     margin: 'auto',
