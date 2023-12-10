@@ -18,7 +18,7 @@ interface Exercise {
     notes?: string;
 }
 
-const DiscoverPage2: React.FC = () => {
+const Discover: React.FC = () => {
     const router = useRouter();
 
     // Definitions of workout categories
@@ -297,6 +297,7 @@ const DiscoverPage2: React.FC = () => {
                 Aid: aid
             }),
         });
+        console.log("easy money");
 
         if (!response.ok) {
             throw new Error('Failed to save user');
@@ -477,4 +478,4 @@ const DiscoverPage2: React.FC = () => {
     );
 }
 
-export default DiscoverPage2;
+export default Discover;
