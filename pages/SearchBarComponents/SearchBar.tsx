@@ -59,12 +59,12 @@ const SearchBar: React.FC<SearchResultsListProps> = ({ sendDataToA, group, gym, 
       const data = await response.json();
       console.log(data);
       const category = workout_muscle_map[group];
+      
       const filteredRows = data.data.rows.filter((row: ExerciseData) => {
-        if (category.includes(row.muscle_group)) {
-          return true; 
-        }
-        return false;
+        const muscleGroups = row.muscle_group.split(',').map(muscle => muscle.trim());
+        return muscleGroups.some(muscle => category.includes(muscle));
       });
+
       console.log("filtered", filteredRows);
       console.log(data.data.rows);
       setResults(filteredRows);
@@ -88,12 +88,12 @@ const SearchBar: React.FC<SearchResultsListProps> = ({ sendDataToA, group, gym, 
       const data = await response.json();
       console.log(data);
       const category = workout_muscle_map[group];
+
       const filteredRows = data.data.rows.filter((row: ExerciseData) => {
-        if (category.includes(row.muscle_group)) {
-          return true; 
-        }
-        return false;
+        const muscleGroups = row.muscle_group.split(',').map(muscle => muscle.trim());
+        return muscleGroups.some(muscle => category.includes(muscle));
       });
+
       console.log("filtered", filteredRows);
       console.log(data.data.rows);
       setResults(filteredRows);
