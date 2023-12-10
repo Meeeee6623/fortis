@@ -1,30 +1,33 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { FC, useEffect, useState } from 'react';
 import DefLayout from '@/components/def_layout';
-import { setCookie, getCookie } from 'cookies-next';
-import '@/public/styles/logfinish.css';     // style sheet for animationsi
-import PrivacyOptionsDialog from '@/components/PrivacyOptionsDialog';
+import React, { FC, useEffect, useState } from 'react';
+import { setCookie, getCookie }           from 'cookies-next';
+import PrivacyOptionsDialog               from '@/components/PrivacyOptionsDialog';
+import '@/public/styles/logfinish.css';     // style sheet for animations
 
 type DataType = {
   workouts: any[];
 };
 
 const LogFinish: React.FC = () => {
+  // store state of aid
   const [aid, setAid] = useState<string | null>(null);
   const [activityData, setActivityData] = useState<any[]>([]);
-
   const [data, setData] = useState<DataType | null>(null);
 
+  // store metadat info
   const [title, setTitle] = useState('No Name');
   const [date, setDate] = useState('No Date');
   const [duration, setDuration] = useState('No Duraition');
 
+  // things for privacy
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
+  const toggleDialog = () => {
+    setIsDialogOpen(!isDialogOpen);
+  };
   const handleSavePrivacyOption = async (option: any) => {
     try {
-      console.log(getCookie('uid'), aid, option)
       const response = await fetch('/api/updateTemplateStatus', {
         method: 'POST',
         headers: {
@@ -44,21 +47,15 @@ const LogFinish: React.FC = () => {
       alert('Changes saved successfully!');
 
       if (!response.ok) throw new Error('Network response was not ok.');
-      // Handle the response here
     } catch (error) {
       alert('Failed to add to templates.');
-      // Handle errors here
     }
   }
   
+  // functions to make things display nice
   function poundsToKilograms(pounds: any) {
     return Math.round(pounds * 0.453592);
   }
-
-  const toggleDialog = () => {
-    setIsDialogOpen(!isDialogOpen);
-  };
-
   function intervalToString(interval: any) {
     let str = '';
 
@@ -89,9 +86,9 @@ const LogFinish: React.FC = () => {
     return str.trim();
   }
 
+  // function to update activity data
   const updateActivityMetaData = async () => {
     try {
-      console.log(getCookie('uid'), aid, title, date, duration)
       const response = await fetch('/api/updateActivityMetaData', {
         method: 'POST',
         headers: {
@@ -113,11 +110,19 @@ const LogFinish: React.FC = () => {
       alert('Changes saved successfully!');
 
       if (!response.ok) throw new Error('Network response was not ok.');
-      // Handle the response here
     } catch (error) {
       alert('Please use YYYY-MM-DD format for date and _d _h _m _s for duration.');
-      // Handle errors here
     }
+  };
+  // metadata changes
+  const handleTitleChange = (event: any) => {
+    setTitle(event.target.value);
+  };
+  const handleDate = (event: any) => {
+    setDate(event.target.value);
+  };
+  const handleDuration = (event: any) => {
+    setDuration(event.target.value);
   };
 
   // get exercise data from EID
@@ -138,7 +143,6 @@ const LogFinish: React.FC = () => {
       }
 
       const data = await response.json();
-      console.log("Exercise Data:", data); // Log to inspect the structure
 
       return data.data.rows[0];
     } catch (error) {
@@ -146,7 +150,7 @@ const LogFinish: React.FC = () => {
       return null;
     }
   };
-
+  // get activity data and workouts related to it
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -178,7 +182,6 @@ const LogFinish: React.FC = () => {
         setDate(activityData.data.rows[0].formatted_date);
         setDuration(intervalToString(activityData.data.rows[0].Duration));
 
-        console.log("Mapped Activities: ", activityData);  // Log the final data
         setActivityData(mapActivities);
 
 
@@ -219,25 +222,12 @@ const LogFinish: React.FC = () => {
 
     fetchData();
   }, [aid]);
-
+  // get aid to load information for
   useEffect(() => {
-    // Access localStorage here
     const localStorageAid = localStorage.getItem('aidTransfer');
     setAid(localStorageAid);
   }, []);
-
-  const handleTitleChange = (event: any) => {
-    setTitle(event.target.value);
-  };
-
-  const handleDate = (event: any) => {
-    setDate(event.target.value);
-  };
-
-  const handleDuration = (event: any) => {
-    setDuration(event.target.value);
-  };
-
+  // if no aid don't show
   if (!aid) {
     return (
       <DefLayout>
@@ -245,8 +235,6 @@ const LogFinish: React.FC = () => {
       </DefLayout>
     );
   }
-
-
 
   return (
     <DefLayout>
