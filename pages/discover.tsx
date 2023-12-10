@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import '@/public/styles/discover.css';
 
+// Exercise interface for workout data
 interface Exercise {
     exerciseName: string;
     numberOfReps?: number;
@@ -20,6 +21,7 @@ interface Exercise {
 const DiscoverPage2: React.FC = () => {
     const router = useRouter();
 
+    // Definitions of workout categories
     const workouts = [
         { name: "Push", description: "A push workout targets your chest, shoulder, and triceps" },
         { name: "Pull", description: "A pull workout targets your back and biceps" },
@@ -32,21 +34,31 @@ const DiscoverPage2: React.FC = () => {
         [key: string]: string[];
     };
 
+    // State to handle pagination and load more functionality
     const [page, setPage] = useState(0);
     const pageSize = 20; // Number of workouts per page
     const [hasMore, setHasMore] = useState(true);
+
+    // State for activity data and its filtering and sorting
+    const [activityData, setActivityData] = useState<any[]>([]);
+    
+    // State to track the selected category for filtering
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
     type CategorySetCounts = {
         [category: string]: number;
     };
 
+    type MuscleGroupSetCounts = {
+        [key: string]: number;
+    };
+
+    // Function to convert pounds to kilograms
     function poundsToKilograms(pounds: any) {
         return Math.round(pounds * 0.453592);
     }
 
-    // State to track the selected category for filtering
-    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
+    // Mapping of workout categories to muscle groups
     const workout_muscle_map: StringToArrayMappingType = {
         "Push": ["Chest", "Shoulder", "Triceps"],
         "Pull": ["Back", "Biceps"],
@@ -54,16 +66,17 @@ const DiscoverPage2: React.FC = () => {
         "Core": ["Abs", "Back", "Obliques"],
         "Cardio": ["Cardio"]
     }
+
+    // Reverse mapping from muscle groups to workout categories
     const muscleToWorkoutMap: { [muscle: string]: string } = {};
     Object.entries(workout_muscle_map).forEach(([workout, muscles]) => {
         muscles.forEach((muscle) => {
             muscleToWorkoutMap[muscle] = workout;
         });
     });
-    const [activityData, setActivityData] = useState<any[]>([]);
-    type MuscleGroupSetCounts = {
-        [key: string]: number;
-    };
+
+
+    // Fetches data for a specific exercise ID
     const ExcDatafromEID = async (query: any) => {
         try {
             const response = await fetch('/api/ExcDatafromEID', {
@@ -79,31 +92,27 @@ const DiscoverPage2: React.FC = () => {
                 throw new Error('Failed to fetch exercise data');
             }
             const data = await response.json();
-            // console.log("Exercise Data:", data); // Log to inspect the structure
             return data.data.rows[0];
         } catch (error) {
             console.error('Error fetching exercise data:', error);
             return null;
         }
     };
-    // Filter and sort activities based on the selected category and set count
+
+    // Filter activities based on the selected category and set count, then sort again based on favourites
     const filteredAndSortedActivityData = activityData
         .filter(activity => {
-            // Apply any existing filters here
             return selectedCategory ? activity.categorySetCounts[selectedCategory] > 5 : true;
         })
         .sort((a, b) => {
-            // Sort based on the absolute value of the favorite count
             return Math.abs(b.Favorite) - Math.abs(a.Favorite);
         });
 
 
-
+    // Fetch and process activity data with category set counts
     const fetchData = async (pageNumber: number) => {
         try {
-            const pageSize = 20; // or another appropriate number
-
-            console.log('Sending:', { page: pageNumber, size: pageSize });
+            const pageSize = 20;
 
             const response = await fetch('/api/TemplateActivities', {
                 method: 'POST',
@@ -124,7 +133,6 @@ const DiscoverPage2: React.FC = () => {
                 setHasMore(false);
             }
 
-            console.log(activityJson)
             const activitiesWithCategorySetCounts = await Promise.all(activityJson.data.map(async (activity: any) => {
                 const categorySetCounts: CategorySetCounts = {};
 
@@ -133,20 +141,24 @@ const DiscoverPage2: React.FC = () => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    // body: JSON.stringify({ eid })
                     body: JSON.stringify({
                         searchQuery: activity.Aid,
                         uid: activity.Uid
                     }),
                 });
-
+                
                 if (!workoutResponse.ok) {
-                    throw new Error('Failed to retrieve history workouts');
+                    throw new Error('Failed to retrieve workouts');
                 }
+
+                // Parsing the data into usable format
+
                 const workoutJson = await workoutResponse.json();
                 const workoutsWithExerciseData = await Promise.all(workoutJson.data.rows.map(async (workout: any) => {
+
                     const exerciseDataResponse = await ExcDatafromEID(workout.Eid);
                     const muscleGroups = exerciseDataResponse?.muscle_group?.split(',') || [];
+
                     muscleGroups.forEach((muscleGroup: string) => {
                         const trimmedMuscleGroup = muscleGroup.trim();
                         const category = muscleToWorkoutMap[trimmedMuscleGroup];
@@ -181,20 +193,6 @@ const DiscoverPage2: React.FC = () => {
         borderRadius: '10px',
     };
 
-    const [results, setResults] = useState<string[]>([]);
-    // const handleWorkoutClick = (workoutName: string) => {console.log(`You clicked ${workoutName}`);};
-
-    const [selectedWorkout, setSelectedWorkout] = useState<string | null>(null);
-    const handleWorkoutClick = (workoutName: string) => {
-        setSelectedWorkout(prevWorkout => {
-            if (prevWorkout === workoutName) {
-                return null; // if the workout is clicked again, unselect it
-            } else {
-                // console.log(workoutName);
-                return workoutName; // otherwise, select the clicked workout
-            }
-        });
-    };
     // Function to handle clicking a workout category button
     const handleCategoryClick = (categoryName: string) => {
         setSelectedCategory(prevCategory => {
@@ -202,13 +200,10 @@ const DiscoverPage2: React.FC = () => {
             return prevCategory === categoryName ? null : categoryName;
         });
     };
-    // Filter activities based on the selected category and set count
-    const filteredActivityData = selectedCategory
-        ? activityData.filter(activity => activity.categorySetCounts[selectedCategory] > 5)
-        : activityData;
 
+    // Function to add a new activity
     const addActivity = async () => {
-        setCookie('log', 'true');       // sets cookie to show that user is logging workout
+        setCookie('log', 'true');    // Set a cookie indicating that a workout is being logged
 
         try {
             const response = await fetch('/api/addActivity', {
@@ -221,13 +216,12 @@ const DiscoverPage2: React.FC = () => {
                 }),
             });
             if (!response.ok) throw new Error('Network response was not ok.');
-            // Handle the response here
         } catch (error) {
             console.error('Failed to add activity:', error);
-            // Handle errors here
         }
     };
 
+    // Function to fetch the latest AID
     const fetchAid = async () => {
         const response = await fetch('/api/getAID', {
             method: 'POST',
@@ -250,17 +244,19 @@ const DiscoverPage2: React.FC = () => {
         return parseInt(data.data.rows[0].Aid);
     };
 
+    // Function to handle clicking on a workout template
     const handleTemplateClick = async (workoutData: any[], aid: any) => {
 
-        console.log('Favorite clicked for Aid:', aid);
         updateFavorites(aid);
 
+        // Check if an activity is being logged currently and add if not
         if (getCookie('log') === 'false') {
             await addActivity();
         }
 
         const templateAid = await fetchAid();
 
+        // Create an array of exercises based on the template data
         const exerciseArray: Exercise[] = workoutData.map((item) => {
             const isMetric = getCookie('units') === 'Metric';
             const convertedWeight = isMetric ? poundsToKilograms(item.Weight) : item.Weight;
@@ -276,30 +272,21 @@ const DiscoverPage2: React.FC = () => {
             };
         });
 
-        console.log(exerciseArray);
-        // Retrieve existing data from localStorage or initialize it as an empty array
+        // Combine the new exercises with any existing ones and store them
         const existingDataString = localStorage.getItem('exercises');
         const existingData: Exercise[] = existingDataString
             ? JSON.parse(existingDataString)
             : [];
 
-        // Append the new data to the existing data
         const combinedData = [...existingData, ...exerciseArray];
 
-        // Save the combined data back to localStorage
         localStorage.setItem('exercises', JSON.stringify(combinedData));
 
-        router.push('/log'); // Assuming '/log' is the path to Log2Page
+        // Navigate to the log page
+        router.push('/log');
     };
 
-    // const handleFavoriteClick = (aid: any) => {
-    //     // Logic to handle the favorite button click
-    //     // For example, updating the favorite count in the state or making an API call
-    //     console.log('Favorite clicked for Aid:', aid);
-    //     updateFavorites(aid);
-    //     // Add your implementation here
-    // };
-
+    // Function to update the favorites count for an activity
     const updateFavorites = async (aid: any) => {
         const response = await fetch('/api/updateFavorites', {
             method: 'POST',
@@ -310,14 +297,13 @@ const DiscoverPage2: React.FC = () => {
                 Aid: aid
             }),
         });
-        console.log("easy money");
 
         if (!response.ok) {
             throw new Error('Failed to save user');
         }
     };
 
-    // Function to handle Load More button click
+// Load the next page of activities if more are available
     const handleLoadMore = () => {
         if (hasMore) {
             const nextPage = page + 1;
@@ -401,14 +387,6 @@ const DiscoverPage2: React.FC = () => {
                                             </span>
 
                                             <div className='col-span-1 flex flex-row items-center'>
-                                                {/* <button onClick={() => handleFavoriteClick(activity.Aid)} className="flex flex-row items-center justify-center">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 h-4 opacity-80">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-
-                                                    <p className="pl-2 pr-3 border-r text-white text-opacity-75 text-sm hover:gradient-text-gb duration-300 text-center">FAVORITE</p>
-                                                </button> */}
-
                                                 <button onClick={() => {
                                                     if (activity && activity.workouts) {
                                                         handleTemplateClick(activity.workouts, activity.Aid);
