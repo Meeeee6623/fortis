@@ -1,3 +1,7 @@
+// get names of people based on friend status 
+// for eg: if receiver = 1 and sender = 1, 
+// then all friends are returned
+
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -34,7 +38,7 @@ export default async (req, res) => {
             const values = [`%${searchQuery}%`, uid];
             console.log('hi');
             const results = await pool.query(searchUserName, values);
-            
+
             res.json({ success: true, data: results });
         } catch (err) {
             console.log('hello');

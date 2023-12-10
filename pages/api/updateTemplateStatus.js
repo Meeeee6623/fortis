@@ -1,3 +1,6 @@
+// setting template status 
+// based on uid, aid
+
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -17,7 +20,7 @@ WHERE
 export default async (req, res) => {
     if (req.method === 'POST') {
         const { uid, aid, option } = req.body;
-        
+
         try {
             const values = [uid, aid, option];
             await pool.query(query, values);

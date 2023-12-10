@@ -1,4 +1,4 @@
-// get user's previous activities
+// get user's previous activities -- only metadata
 
 import { Pool } from 'pg';
 

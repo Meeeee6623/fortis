@@ -1,3 +1,6 @@
+// for exploring exercises
+// order by popularity
+
 import { Pool } from 'pg';
 
 const pool = new Pool({

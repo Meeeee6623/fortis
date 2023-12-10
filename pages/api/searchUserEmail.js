@@ -1,3 +1,6 @@
+// get user data based on email
+// this is legal because email is unique
+
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -19,7 +22,7 @@ export default async (req, res) => {
             const values = [`%${searchQuery}%`];
             console.log('hi2');
             const results = await pool.query(searchUserEmail, values);
-            
+
             res.json({ success: true, data: results });
         } catch (err) {
             console.log('hello2');

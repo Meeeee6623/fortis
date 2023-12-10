@@ -1,3 +1,5 @@
+// get user workout history -- actual exercise data
+
 import { Pool } from 'pg';
 
 const pool = new Pool({

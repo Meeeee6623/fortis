@@ -1,3 +1,6 @@
+// this is for quick add
+// last 10 exercises can be shown to be added as a template
+
 import { Pool } from 'pg';
 
 const pool = new Pool({

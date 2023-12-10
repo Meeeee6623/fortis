@@ -1,3 +1,6 @@
+// number of likes or favorites 
+// called if someone uses aid as template
+
 import { Pool } from 'pg';
 
 const pool = new Pool({
@@ -17,8 +20,8 @@ const query = `
 
 export default async (req, res) => {
     if (req.method === 'POST') {
-        const {Aid} = req.body;
-        
+        const { Aid } = req.body;
+
         try {
             const values = [Aid];
             await pool.query(query, values);
