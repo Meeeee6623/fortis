@@ -187,8 +187,6 @@ const MatchedPersonDisplay: React.FC<MatchedPersonDisplayProps> = ({ person }) =
                 </button>
             </div>
 
-
-
             <div className="grid grid-cols-5 gap-1 mb-5">
                 <p className="col-span-1 font-bold">Location:</p>
                 <p className="col-span-4">{person.location !== null ? person.location : 'Not specified'}</p>
@@ -446,6 +444,10 @@ const Matcher: React.FC = () => {
                             ))}
                         </div>
                     ) : ""}
+
+                    <div className="h-[2px] w-[3vw] my-[2vh] bg-white bg-opacity-50"></div>
+
+                    <div className="text-center">Please have a gender to match :D</div>
 
                 </div>
 
