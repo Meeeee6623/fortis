@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { getCookie }                      from 'cookies-next';
 import DefLayout  from '@/components/def_layout';
-import SearchBar  from "./SocialSearchBarComponents/SearchBar";
+import SearchBar  from "../components/SocialSearchBarComponents/SearchBar";
 import styles     from './WorkoutBuddy.module.css';
 import '@/public/styles/friends.css';
 
