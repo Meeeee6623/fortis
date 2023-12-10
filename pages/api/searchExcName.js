@@ -20,7 +20,6 @@ export default async (req, res) => {
         try {
             // Insert user
             const values = [`%${searchQuery}%`];
-            // console.log('hi');
             const results = await pool.query(searchExcName, values);
 
             res.json({ success: true, data: results });

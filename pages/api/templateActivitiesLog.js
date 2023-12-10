@@ -26,7 +26,7 @@ export default async (req, res) => {
 
             res.json({ success: true, data: results });
         } catch (err) {
-            console.log('hola');
+            console.log('templateActivitiesLog.js error');
             console.error(err);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }

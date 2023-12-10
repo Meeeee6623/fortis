@@ -25,7 +25,7 @@ export default async (req, res) => {
             const values = [uid, aid, option];
             await pool.query(query, values);
 
-            res.status(200).json({ message: 'EndTime and Duration Updated Successfully' });
+            res.status(200).json({ message: 'template status set' });
         } catch (err) {
             console.error(err);
             res.status(500).json({ error: 'Internal Server Error' });

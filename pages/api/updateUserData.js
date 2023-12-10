@@ -30,7 +30,7 @@ export default async (req, res) => {
             const values = [uid, name, age, height, weight, gender, units, privacy, about];
             await pool.query(updateUser, values);
 
-            res.status(200).send('Data saved successfully');
+            res.status(200).send('User Data updated successfully');
         } catch (err) {
             console.log('Error in InsertAuthUser');
             console.error(err);

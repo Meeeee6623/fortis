@@ -26,7 +26,7 @@ export default async (req, res) => {
             const values = [Aid];
             await pool.query(query, values);
 
-            res.status(200).json({ message: 'EndTime and Duration Updated Successfully' });
+            res.status(200).json({ message: 'favorites updated successfully' });
         } catch (err) {
             console.error(err);
             res.status(500).json({ error: 'Internal Server Error' });

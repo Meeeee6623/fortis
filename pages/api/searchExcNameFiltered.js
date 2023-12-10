@@ -21,12 +21,12 @@ export default async (req, res) => {
         try {
             // Insert user
             const values = [`%${searchQuery}%`, gym];
-            console.log('hi');
+            console.log('searchExcNameFiltered.js');
             const results = await pool.query(searchExcName, values);
 
             res.json({ success: true, data: results });
         } catch (err) {
-            console.log('hello');
+            console.log('error in searchExcNameFiltered.js');
             console.error(err);
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         }
