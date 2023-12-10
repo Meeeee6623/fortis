@@ -111,8 +111,6 @@ interface FlexiblePersonListProps {
 const FlexiblePersonList1: React.FC<FlexiblePersonListProps> = ({ people, onAcceptFriendRequest, onRejectFriendRequest }) => {
   const receiverUid = getCookie('uid');
 
-  const isFirstPersonActive = people.length > 0;
-
   const [showMore, setShowMore] = useState<boolean[]>(people.map(() => false));
 
   const toggleShowMore = (index: number) => {
@@ -125,8 +123,11 @@ const FlexiblePersonList1: React.FC<FlexiblePersonListProps> = ({ people, onAcce
 
   return (
     <ul className="">
-      {people.map((person, index) => (
-        <li key={person.uid} className={`border border-white p-3 rounded-md m-3 border-opacity-60 bg-white bg-opacity-5 ${isFirstPersonActive ? 'glow-effect ' : ''}`}>
+      {people.map((person, index) => {
+        // Determine if the current person is the first in the list
+        const isFirstPersonActive = index === 0;
+        return (
+          <li key={person.uid} className={`border border-white p-3 rounded-md m-3 border-opacity-60 bg-white bg-opacity-5 ${isFirstPersonActive ? 'glow-effect ' : ''}`}>
           <div className='flex flex-row items-center justify-between'>
             <h2 className="text-2xl font-bold  gradient-text-pb">{person.name || 'Not specified'}</h2>
             <div className="flex flex-row items-center justify-center">
@@ -167,7 +168,8 @@ const FlexiblePersonList1: React.FC<FlexiblePersonListProps> = ({ people, onAcce
             </p>
           </div>
         </li>
-      ))}
+        );
+      })}
     </ul>
   );
 };
